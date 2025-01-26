@@ -8,9 +8,5 @@ html {
 body {
   margin: 0;
   background: $primary-color;
-}
-
-nav ul {
-  list-style: none;
-  display: flex;
+  color: $text-color;
 }
