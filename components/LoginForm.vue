@@ -45,6 +45,12 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import pb from '../services/pocketbase';
+
+const router = useRouter();
+
 const form = ref({
   email: '',
   password: '',
@@ -63,20 +69,23 @@ const handleSubmit = async () => {
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.value.email)) {
     errors.value.email = 'Email invalide';
+    return;
   }
-  if (!form.value.password) {
-    errors.value.password = 'Mot de passe requis';
-  }
-
-  if (Object.values(errors.value).some((error) => error !== '')) return;
 
   isSubmitting.value = true;
   try {
-    // Simulation de connexion
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log('Connexion réussie', form.value);
+    const authData = await pb
+      .collection('users')
+      .authWithPassword(form.value.email, form.value.password);
+
+    if (form.value.remember) {
+      localStorage.setItem('pocketbase_auth', JSON.stringify(authData));
+    }
+
+    router.push('/');
   } catch {
-    console.error('Erreur lors de la connexion');
+    errors.value.email = 'Identifiants invalides';
+    console.error('Erreur de connexion:', error);
   } finally {
     isSubmitting.value = false;
   }

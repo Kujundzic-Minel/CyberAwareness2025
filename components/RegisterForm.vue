@@ -67,6 +67,12 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import pb from '../services/pocketbase';
+
+const router = useRouter();
+
 const form = ref({
   name: '',
   email: '',
@@ -89,27 +95,46 @@ const handleSubmit = async () => {
   // Validations
   if (form.value.name.length < 2) {
     errors.value.name = 'Le nom doit contenir au moins 2 caractères';
+    return;
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.value.email)) {
     errors.value.email = 'Email invalide';
+    return;
   }
-  if (form.value.password.length < 6) {
+  if (form.value.password.length < 8) {
     errors.value.password =
-      'Le mot de passe doit contenir au moins 6 caractères';
+      'Le mot de passe doit contenir au moins 8 caractères';
+    return;
   }
   if (form.value.password !== form.value.confirmPassword) {
     errors.value.confirmPassword = 'Les mots de passe ne correspondent pas';
+    return;
   }
-
-  if (Object.values(errors.value).some((error) => error !== '')) return;
 
   isSubmitting.value = true;
   try {
-    // Simulation d'inscription
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log('Inscription réussie', form.value);
+    const data = {
+      email: form.value.email,
+      password: form.value.password,
+      passwordConfirm: form.value.confirmPassword,
+      name: form.value.name,
+      username: form.value.email.split('@')[0],
+    };
+
+    await pb.collection('users').create(data);
+    await pb
+      .collection('users')
+      .authWithPassword(form.value.email, form.value.password);
+    router.push('/');
   } catch {
-    console.error("Erreur lors de l'inscription");
+    console.error('Erreur inscription:', error);
+    if (error.data?.data?.email) {
+      errors.value.email = 'Cet email est déjà utilisé';
+    } else if (error.data?.data?.password) {
+      errors.value.password = 'Mot de passe invalide';
+    } else {
+      errors.value.email = "Une erreur s'est produite lors de l'inscription";
+    }
   } finally {
     isSubmitting.value = false;
   }
