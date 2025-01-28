@@ -94,23 +94,30 @@ const emit = defineEmits(['avatar-updated', 'error']);
 
 .avatar-section {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: fit-content;
 
   .user-avatar {
     width: 150px;
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
-    margin-bottom: 1rem;
     border: 3px solid $accent-color;
+    margin: 0; // Suppression de la marge bottom
   }
 
   .update-avatar-btn {
     padding: 0.5rem 1rem;
     background-color: $accent-color;
-    color: white;
+    color: $text-color;
     border: none;
     border-radius: $border-radius;
     cursor: pointer;
+    width: fit-content; // Ajustement de la largeur au contenu
+    white-space: nowrap; // Empêche le texte de se couper
 
     &:hover {
       background-color: darken($accent-color, 10%);
@@ -156,6 +163,7 @@ const emit = defineEmits(['avatar-updated', 'error']);
 
   .avatar-section {
     margin: 0 auto;
+    width: 100%; // Ajustement pour le mobile
   }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="actions">
-    <RouterLink to="/quiz" class="action-btn">
+    <RouterLink to="/quizz" class="action-btn">
       Commencer un nouveau quiz
     </RouterLink>
   </div>

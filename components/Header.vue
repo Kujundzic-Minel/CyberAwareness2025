@@ -6,19 +6,19 @@
         <NuxtLink class="header__link" to="/">Home</NuxtLink>
       </li>
       <li class="header__item">
-        <NuxtLink class="header__link" to="moocs">Moocs</NuxtLink>
+        <NuxtLink class="header__link" to="/moocs">Moocs</NuxtLink>
       </li>
       <li class="header__item">
-        <NuxtLink class="header__link" to="quizz">Quizz</NuxtLink>
+        <NuxtLink class="header__link" to="/quizz">Quizz</NuxtLink>
       </li>
       <li class="header__item">
-        <NuxtLink class="header__link" to="about">About</NuxtLink>
+        <NuxtLink class="header__link" to="/about">About</NuxtLink>
       </li>
       <li class="header__item">
-        <NuxtLink class="header__link" to="contact">Contact</NuxtLink>
+        <NuxtLink class="header__link" to="/contact">Contact</NuxtLink>
       </li>
       <li class="header__item">
-        <NuxtLink class="header__link" to="profile">Profil</NuxtLink>
+        <NuxtLink class="header__link" to="/profile">Profil</NuxtLink>
       </li>
       <li class="header__item">
         <NuxtLink class="header__link header__link--login" to="login"
