@@ -1,9 +1,14 @@
 <template>
   <div class="quiz-container">
-    <div v-if="questions.length === 0" class="loading">
-      Chargement du quiz...
+    <div v-if="loading" class="loading-state">Chargement du quiz...</div>
+
+    <div v-else-if="error" class="error-state">
+      <p>{{ error }}</p>
+      <button class="retry-button" @click="reloadQuiz">Réessayer</button>
+      <NuxtLink to="/quizz" class="back-button"> Retour aux quiz </NuxtLink>
     </div>
-    <div v-else>
+
+    <div v-else-if="theme" class="quiz-content">
       <QuizCard
         v-if="currentQuestion"
         :quiz="currentQuestion"
@@ -44,10 +49,24 @@ interface Quiz {
   id: string;
   title: string;
   choices: string[];
-  correct_answer: string; // Changé de correctAnswer à correct_answer
+  correct_answer: string;
   points: number;
   hint: string;
   theme: string;
+  created: string;
+}
+
+interface Theme {
+  id: string;
+  title: string;
+  slug: string;
+}
+
+interface QuizResult {
+  user: string;
+  theme: string;
+  score: number;
+  completed_at: Date;
 }
 
 const route = useRoute();
@@ -56,39 +75,55 @@ const questions = ref<Quiz[]>([]);
 const currentIndex = ref(0);
 const hasAnswered = ref(false);
 const totalPoints = ref(0);
+const theme = ref<Theme | null>(null);
+const loading = ref(true);
+const error = ref<string>('');
 
-onMounted(async () => {
-  if (!pb.authStore.isValid) {
-    router.push('/login');
-    return;
-  }
+const loadQuiz = async () => {
+  const themeSlug = route.params.theme as string;
 
   try {
-    const theme = await pb
-      .collection('themes')
-      .getFirstListItem(`slug="${route.params.theme}"`);
+    loading.value = true;
+    error.value = '';
 
-    if (!theme) {
-      console.error('Thème non trouvé');
-      router.push('/quizz');
-      return;
+    const records = await pb.collection('themes').getList<Theme>(1, 1, {
+      filter: `slug = "${themeSlug}"`,
+    });
+
+    if (records.items.length === 0) {
+      throw new Error('Quiz non trouvé');
     }
 
+    theme.value = records.items[0];
+
     const fetchedQuestions = await pb.collection('quizzes').getFullList<Quiz>({
-      filter: `theme="${theme.id}"`,
+      filter: `theme = "${theme.value.id}"`,
       sort: 'created',
     });
 
-    // Nettoyer les données reçues
     questions.value = fetchedQuestions.map((q) => ({
       ...q,
-      correct_answer: JSON.parse(q.correct_answer), // Enlever les guillemets supplémentaires
+      correct_answer: q.correct_answer ? JSON.parse(q.correct_answer) : '',
     }));
-  } catch (error) {
-    console.error('Erreur lors du chargement des questions:', error);
-    // Ne pas rediriger immédiatement en cas d'erreur
-    // Afficher un message d'erreur à l'utilisateur à la place
+  } catch (err) {
+    console.error('Erreur lors du chargement des questions:', err);
+    error.value =
+      err instanceof Error ? err.message : 'Impossible de charger le quiz';
+
+    if (err instanceof Error && err.message.includes('404')) {
+      router.push('/quizz');
+    }
+  } finally {
+    loading.value = false;
   }
+};
+
+const reloadQuiz = () => {
+  loadQuiz();
+};
+
+onMounted(() => {
+  loadQuiz();
 });
 
 const currentQuestion = computed(() => questions.value[currentIndex.value]);
@@ -109,15 +144,18 @@ const nextQuestion = () => {
 
 const finishQuiz = async () => {
   try {
-    await pb.collection('quiz_results').create({
-      user: pb.authStore.model?.id,
-      theme: route.params.theme,
+    const quizResult: QuizResult = {
+      user: pb.authStore.model?.id ?? '',
+      theme: theme.value?.id ?? '',
       score: totalPoints.value,
       completed_at: new Date(),
-    });
+    };
+
+    await pb.collection('quiz_results').create(quizResult);
     router.push('/profile');
-  } catch (error) {
-    console.error("Erreur lors de l'enregistrement du résultat:", error);
+  } catch (err) {
+    console.error("Erreur lors de l'enregistrement du résultat:", err);
+    error.value = "Erreur lors de l'enregistrement du résultat";
   }
 };
 </script>
@@ -130,11 +168,49 @@ const finishQuiz = async () => {
   margin: 0 auto;
   padding: $spacing-unit * 2.5;
 
-  .loading {
+  .loading-state {
     text-align: center;
-    padding: $spacing-unit * 2.5;
-    font-size: 1.2em;
-    color: $text-color;
+    padding: 2rem;
+    color: $primary-color;
+  }
+
+  .error-state {
+    text-align: center;
+    padding: 2rem;
+
+    p {
+      color: #dc3545;
+      margin-bottom: 1rem;
+    }
+
+    .retry-button,
+    .back-button {
+      padding: 0.5rem 1rem;
+      margin: 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .retry-button {
+      background-color: $primary-color;
+      color: white;
+      border: none;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+    }
+
+    .back-button {
+      background-color: #f8f9fa;
+      color: #333;
+      text-decoration: none;
+      border: 1px solid #ddd;
+
+      &:hover {
+        background-color: #e9ecef;
+      }
+    }
   }
 
   .navigation {

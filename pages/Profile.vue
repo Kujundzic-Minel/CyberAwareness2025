@@ -1,148 +1,220 @@
 <template>
   <div class="profile-container">
-    <UserProfile
-      v-if="user"
-      :user="{
-        username: user.username,
-        total_points: user.total_points,
-        current_grade: {
-          name: user.expand?.current_grade?.name || 'Non défini',
-        },
-      }"
-    />
-    <div v-if="results.length > 0" class="quiz-results">
-      <h2>Quiz joués</h2>
-      <ul>
-        <li v-for="result in results" :key="result.id" class="result-item">
-          <span>{{ result.expand?.theme?.title || 'Quiz inconnu' }}</span>
-          <span>{{ result.score }} points</span>
-          <span>{{ formatDate(result.completed_at) }}</span>
-        </li>
-      </ul>
-      <div class="stats">
-        <p>Score total: {{ totalScore }} points</p>
-        <p>Moyenne: {{ averageScore }} points/quiz</p>
-      </div>
+    <div v-if="loading" class="loading-state">
+      <div class="loader" />
+      <p>Chargement de votre profil...</p>
     </div>
-    <p v-else>Aucun quiz complété pour le moment.</p>
+
+    <div v-else-if="error" class="error-state">
+      {{ error }}
+      <button class="retry-button" @click="reloadData">Réessayer</button>
+    </div>
+
+    <div v-else class="profile-content">
+      <ProfileHeader
+        :user="user || {}"
+        @avatar-updated="reloadData"
+        @error="handleError"
+      />
+      <UserStats :user="userWithGrade" :results="results" />
+      <ProfileActions />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import pb from '@/services/pocketbase';
-import UserProfile from '@/components/UserProfil.vue';
+import ProfileHeader from '@/components/ProfileHeader.vue';
+import UserStats from '@/components/UserStats.vue';
+import ProfileActions from '@/components/ProfileActions.vue';
 
 interface Grade {
   id: string;
   name: string;
+  min_points: number;
+}
+
+interface QuizResult {
+  id: string;
+  user: string;
+  quiz: string;
+  score: number;
+  created: string;
+  expand?: {
+    quiz: {
+      id: string;
+      title: string;
+    };
+  };
 }
 
 interface User {
   id: string;
   username: string;
-  total_points: number;
+  name?: string;
+  email: string;
+  created: string;
+  total_points?: number;
+  avatar?: string;
   expand?: {
     current_grade?: Grade;
   };
 }
 
-interface Theme {
-  id: string;
-  title: string;
-  slug: string;
-}
-
-interface QuizResult {
-  id: string;
-  score: number;
-  completed_at: string;
-  theme: string;
-  user: string;
-  expand?: {
-    theme?: Theme;
-  };
-}
-
 const router = useRouter();
-const user = ref<User | null>(null);
+const loading = ref(true);
+const error = ref<string>('');
+const user = ref<User>({
+  id: '',
+  username: '',
+  email: '',
+  created: '',
+  total_points: 0,
+});
+
+const userWithGrade = computed(() => ({
+  ...user.value,
+  total_points: user.value.total_points ?? 0,
+}));
 const results = ref<QuizResult[]>([]);
 
-// Vérification de l'authentification
-onMounted(async () => {
-  if (!pb.authStore.isValid) {
-    router.push('/login');
-    return;
-  }
+const reloadData = () => {
+  loading.value = true;
+  error.value = '';
+  loadUserData();
+};
 
+const determineGrade = async (points: number): Promise<Grade> => {
+  try {
+    const { items } = await pb.collection('grades').getList<Grade>(1, 50, {
+      sort: '-min_points',
+    });
+
+    const currentGrade = items.find((grade) => points >= grade.min_points);
+    return currentGrade || { id: 'default', name: 'Débutant', min_points: 0 };
+  } catch (err) {
+    console.error('Erreur lors de la récupération des grades:', err);
+    return { id: 'default', name: 'Débutant', min_points: 0 };
+  }
+};
+
+const loadUserData = async () => {
   try {
     const userId = pb.authStore.model?.id;
     if (!userId) throw new Error('Utilisateur non connecté');
 
-    const [userData, resultsData] = await Promise.all([
-      pb.collection('users').getOne<User>(userId, {
-        expand: 'current_grade',
-      }),
-      pb.collection('quiz_results').getFullList<QuizResult>({
+    const userData = await pb.collection('users').getOne<User>(userId);
+    const resultsData = await pb
+      .collection('quiz_results')
+      .getFullList<QuizResult>({
         filter: `user="${userId}"`,
-        sort: '-completed_at',
-        expand: 'theme',
-      }),
-    ]);
+        expand: 'quiz',
+        sort: '-created',
+      });
 
-    user.value = userData;
+    const totalPoints = resultsData.reduce(
+      (sum, result) => sum + (result.score || 0),
+      0
+    );
+    const currentGrade = await determineGrade(totalPoints);
+
+    user.value = {
+      ...userData,
+      total_points: totalPoints,
+      expand: {
+        current_grade: currentGrade,
+      },
+    };
+
     results.value = resultsData;
-  } catch (error) {
-    console.error('Erreur lors du chargement du profil:', error);
+  } catch (err) {
+    if (
+      err instanceof Error &&
+      err.message.includes('Failed to authenticate')
+    ) {
+      pb.authStore.clear();
+      router.push('/login');
+      return;
+    }
+    error.value =
+      err instanceof Error ? err.message : 'Une erreur est survenue';
+    console.error('Erreur lors du chargement du profil:', err);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const checkAuth = () => {
+  if (!pb.authStore.isValid) {
+    pb.authStore.clear();
     router.push('/login');
+    return false;
+  }
+  return true;
+};
+
+onMounted(() => {
+  if (checkAuth()) {
+    loadUserData();
   }
 });
 
-// Calcul des statistiques
-const totalScore = computed(() =>
-  results.value.reduce((sum, result) => sum + result.score, 0)
-);
-
-const averageScore = computed(() =>
-  results.value.length > 0
-    ? Math.round(totalScore.value / results.value.length)
-    : 0
-);
-
-// Formatage de la date
-const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('fr-FR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
+const handleError = (message: string) => {
+  error.value = message;
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .profile-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
 }
 
-.quiz-results {
-  margin-top: 20px;
+.loading-state {
+  text-align: center;
+  padding: 2rem;
+  color: $text-color;
+
+  .loader {
+    border: 3px solid $hover-color;
+    border-radius: 50%;
+    border-top: 3px solid $accent-color;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+  }
 }
 
-.result-item {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 16px;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
+.error-state {
+  background-color: $error-color;
+  color: $text-color;
+  padding: 1rem;
+  border-radius: $border-radius;
+  text-align: center;
+
+  .retry-button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: $accent-color;
+    color: $text-color;
+    border: none;
+    border-radius: $border-radius;
+    cursor: pointer;
+
+    &:hover {
+      background-color: darken($accent-color, 10%);
+    }
+  }
 }
 
-.stats {
-  margin-top: 20px;
-  padding: 16px;
-  background-color: #f5f5f5;
-  border-radius: 8px;
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>
