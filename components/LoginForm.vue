@@ -85,7 +85,7 @@ const handleSubmit = async () => {
     router.push('/');
   } catch {
     errors.value.email = 'Identifiants invalides';
-    console.error('Erreur de connexion:', errors);
+    console.error('Erreur de connexion:', error);
   } finally {
     isSubmitting.value = false;
   }
