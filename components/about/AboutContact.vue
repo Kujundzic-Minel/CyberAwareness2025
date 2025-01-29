@@ -8,7 +8,7 @@
         Vous souhaitez en savoir plus sur nos services ? N'hésitez pas à nous
         contacter.
       </p>
-      <button class="contact__button">Prendre rendez-vous</button>
+      <button class="contact__button">Nous contacter</button>
     </div>
   </section>
 </template>

@@ -28,7 +28,8 @@ defineProps<Props>();
   transition: all 150ms ease;
 
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(-5px);
+    background-color: $hover-color;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 

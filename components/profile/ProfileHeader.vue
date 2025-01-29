@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import pb from '@/services/pocketbase';
+import pb from '../../services/pocketbase';
 
 const props = defineProps<{
   user: {

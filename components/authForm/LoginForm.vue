@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import pb from '../services/pocketbase';
+import pb from '../../services/pocketbase';
 
 const router = useRouter();
 

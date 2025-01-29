@@ -41,8 +41,8 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import pb from '@/services/pocketbase';
-import QuizCard from '@/components/QuizCard.vue';
-import ProgressBar from '@/components/ProgressBar.vue';
+import QuizCard from '~/components/quiz/QuizCard.vue';
+import ProgressBar from '~/components/quiz/ProgressBar.vue';
 import Button from '@/components/Button.vue';
 
 interface Quiz {

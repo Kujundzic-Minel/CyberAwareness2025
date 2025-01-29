@@ -61,7 +61,6 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import Button from './Button.vue';
 
 interface QuizQuestion {
   title: string;
@@ -124,8 +123,6 @@ const resultMessage = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/foundations/_variables.scss';
-
 .quiz-card {
   max-width: 800px;
   margin: 0 auto;

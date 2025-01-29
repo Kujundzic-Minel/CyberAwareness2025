@@ -69,7 +69,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import pb from '../services/pocketbase';
+import pb from '../../services/pocketbase';
 
 const router = useRouter();
 
@@ -126,11 +126,14 @@ const handleSubmit = async () => {
       .collection('users')
       .authWithPassword(form.value.email, form.value.password);
     router.push('/');
-  } catch {
+  } catch (error) {
     console.error('Erreur inscription:', error);
-    if (error.data?.data?.email) {
+    const err = error as {
+      data?: { data?: { email?: string; password?: string } };
+    };
+    if (err.data?.data?.email) {
       errors.value.email = 'Cet email est déjà utilisé';
-    } else if (error.data?.data?.password) {
+    } else if (err.data?.data?.password) {
       errors.value.password = 'Mot de passe invalide';
     } else {
       errors.value.email = "Une erreur s'est produite lors de l'inscription";

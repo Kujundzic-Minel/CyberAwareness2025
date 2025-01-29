@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import pb from '@/services/pocketbase';
-import ThemeCard from '@/components/ThemeCard.vue';
+import ThemeCard from '~/components/quiz/ThemeCard.vue';
 
 interface Theme {
   id: string;

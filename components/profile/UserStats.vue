@@ -4,7 +4,7 @@
       <div class="stat-card">
         <h3>Rang</h3>
         <p class="grade">
-          {{ user?.expand?.current_grade?.name || 'Non classé' }}
+          {{ user?.expand?.current_grade?.name }}
         </p>
       </div>
       <div class="stat-card">
@@ -24,6 +24,8 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+
 interface QuizResult {
   score: number;
 }
@@ -70,14 +72,14 @@ const averageScore = computed(() => {
 .stat-card {
   text-align: center;
   padding: 1.5rem;
-  background: $hover-color;
+  background: $primary-color;
   border-radius: $border-radius;
   transition: transform 0.2s ease;
   border: 1px solid rgba($text-color, 0.1);
 
   &:hover {
-    transform: translateY(-2px);
-    background: lighten($hover-color, 5%);
+    transform: translateY(-5px);
+    background: $hover-color;
   }
 
   h3 {

@@ -24,9 +24,6 @@
 
 <script setup lang="ts">
 import pb from '@/services/pocketbase';
-import ProfileHeader from '@/components/ProfileHeader.vue';
-import UserStats from '@/components/UserStats.vue';
-import ProfileActions from '@/components/ProfileActions.vue';
 
 interface Grade {
   id: string;
