@@ -1,7 +1,7 @@
 <template>
   <div class="quiz-card">
     <h2 class="quiz-card__title">{{ quiz.title }}</h2>
-    <form @submit.prevent="submitAnswer" class="quiz-card__form">
+    <form class="quiz-card__form" @submit.prevent="submitAnswer">
       <div class="quiz-card__choices">
         <div
           v-for="(choice, index) in quiz.choices"
@@ -17,10 +17,10 @@
           }"
         >
           <input
-            type="radio"
             :id="'choice-' + index"
-            :value="choice"
             v-model="selectedAnswer"
+            type="radio"
+            :value="choice"
             :disabled="answered"
             :name="'quiz-answer'"
             class="quiz-card__radio"
@@ -66,7 +66,7 @@ import Button from './Button.vue';
 interface QuizQuestion {
   title: string;
   choices: string[];
-  correct_answer: string; // Changé de correctAnswer à correct_answer
+  correct_answer: string;
   hint: string;
   points: number;
 }
