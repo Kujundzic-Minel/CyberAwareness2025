@@ -18,7 +18,7 @@
         <NuxtLink class="header__link" to="/contact">Contact</NuxtLink>
       </li>
       <li class="header__item">
-        <NuxtLink class="header__link" to="/profile">Profil</NuxtLink>
+        <NuxtLink class="header__link" to="/profile">Profile</NuxtLink>
       </li>
       <li class="header__item">
         <NuxtLink class="header__link header__link--login" to="login"

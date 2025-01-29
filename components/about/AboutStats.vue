@@ -1,19 +1,40 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import pb from '../../services/pocketbase';
+
+interface Stats {
+  id: string;
+  about_number: string;
+  about_label: string;
+}
+
+const stats = ref<Stats[]>([]);
+
+const getStats = async () => {
+  try {
+    const records = await pb.collection('about_stats').getFullList();
+    stats.value = records.map((record) => ({
+      id: record.id,
+      about_number: record.stats_number,
+      about_label: record.stats_label,
+    }));
+  } catch (error) {
+    console.error('Error fetching stats:', error);
+  }
+};
+
+onMounted(() => {
+  getStats();
+});
+</script>
 
 <template>
   <section class="stats">
+    <h2 class="stats__title">Nos statistiques</h2>
     <div class="stats__grid">
-      <div class="stats__item">
-        <h3 class="stats__number">10K+</h3>
-        <p class="stats__label">Utilisateurs formés</p>
-      </div>
-      <div class="stats__item">
-        <h3 class="stats__number">95%</h3>
-        <p class="stats__label">Taux de satisfaction</p>
-      </div>
-      <div class="stats__item">
-        <h3 class="stats__number">24/7</h3>
-        <p class="stats__label">Support disponible</p>
+      <div v-for="stat in stats" :key="stat.id" class="stats__item">
+        <h3 class="stats__number">{{ stat.about_number }}</h3>
+        <p class="stats__label">{{ stat.about_label }}</p>
       </div>
     </div>
   </section>
@@ -22,6 +43,13 @@
 <style lang="scss" scoped>
 .stats {
   padding: $spacing-unit * 6 0;
+
+  &__title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: $spacing-unit * 4;
+    color: $text-color;
+  }
 
   &__grid {
     display: grid;

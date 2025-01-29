@@ -1,20 +1,30 @@
 <script setup lang="ts">
-import FeaturesCard from './FeaturesCard.vue';
+import pb from '../../services/pocketbase';
 
-const features = [
-  {
-    title: 'Formation continue',
-    description: 'Programmes de formation adaptés et mis à jour régulièrement',
-  },
-  {
-    title: 'Expertise reconnue',
-    description: "Une équipe d'experts certifiés en cybersécurité",
-  },
-  {
-    title: 'Solutions personnalisées',
-    description: 'Des solutions adaptées à vos besoins spécifiques',
-  },
-];
+interface Feature {
+  id: string;
+  title: string;
+  description: string;
+}
+
+const features = ref<Feature[]>([]);
+
+const getFeatures = async () => {
+  try {
+    const records = await pb.collection('about_feature').getFullList();
+    features.value = records.map((record) => ({
+      id: record.id,
+      title: record.title,
+      description: record.description,
+    }));
+  } catch (error) {
+    console.error('Error fetching features:', error);
+  }
+};
+
+onMounted(() => {
+  getFeatures();
+});
 </script>
 
 <template>
@@ -23,7 +33,7 @@ const features = [
     <div class="features__grid">
       <FeaturesCard
         v-for="feature in features"
-        :key="feature.title"
+        :key="feature.id"
         :title="feature.title"
         :description="feature.description"
       />
