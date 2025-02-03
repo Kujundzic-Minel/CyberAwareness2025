@@ -7,6 +7,7 @@ export default defineNuxtConfig({
   sanity: {
     projectId: 'tkdg9g2l',
     dataset: 'cyberawareness2025',
+    useCdn: false,
   },
 
   app: {
