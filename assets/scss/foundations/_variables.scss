@@ -11,23 +11,29 @@ $disabled-color: #cccccc;
 $shadow-color: rgba(0, 0, 0, 0.1);
 
 // Font
+$font-family-primary: 'Poppins', sans-serif;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
 
 // Spacing
 $border-radius: 8px;
 $spacing-unit: 8px;
+$container-max-width: 1200px;
 
 // Breakpoints
-
-// Z-index
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
 
 // Shadows
-
-// Border-radius
+$shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+$shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
 
 // Transitions
-
-// Grid
-
-// Typography
+$transition-base: all 0.3s ease;
+$transition-transform: transform 0.3s ease;
 
 
