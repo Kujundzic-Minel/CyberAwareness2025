@@ -5,3 +5,21 @@
 @use 'tailwindcss/utilities';
 @use './foundations/normalize';
 
+// Custom Scrollbar
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: $primary-color;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $accent-color;
+  border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: $hover-color;
+}
+
