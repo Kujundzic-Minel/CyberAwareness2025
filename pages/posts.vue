@@ -26,7 +26,7 @@ function onPageClick(i: number) {
 }
 
 const page = ref(1);
-const postsPerPage = 2;
+const postsPerPage = 3;
 
 const startPost = computed(() => (page.value - 1) * postsPerPage);
 const endPost = computed(() => page.value * postsPerPage);
