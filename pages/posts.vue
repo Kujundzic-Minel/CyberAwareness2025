@@ -136,3 +136,175 @@ const totalPages = computed(() => {
     </main>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.posts-page {
+  padding: $spacing-unit * 4;
+  background-color: $primary-color;
+  min-height: 100vh;
+
+  &__main {
+    max-width: $container-max-width;
+    margin: 0 auto;
+  }
+}
+
+.categories {
+  margin-bottom: $spacing-unit * 4;
+
+  &__title {
+    font-family: $font-family-primary;
+    font-weight: $font-weight-semibold;
+    text-align: center;
+    margin-bottom: $spacing-unit * 3;
+    font-size: 2.5rem;
+    color: $text-color;
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: $spacing-unit * 1.5;
+  }
+
+  &__button {
+    padding: $spacing-unit $spacing-unit * 2;
+    background: $hover-color;
+    border: 1px solid rgba($text-color, 0.1);
+    border-radius: $border-radius;
+    font-family: $font-family-primary;
+    font-weight: $font-weight-medium;
+    color: $text-color;
+    transition: $transition-base;
+    cursor: pointer;
+
+    &:hover {
+      background: $accent-color;
+      color: $primary-color;
+      transform: translateY(-2px);
+    }
+
+    &--active {
+      background: $accent-color;
+      color: $primary-color;
+      border-color: $accent-color;
+    }
+  }
+}
+
+.posts {
+  &__title {
+    @extend .categories__title;
+  }
+
+  &__grid {
+    display: grid;
+    gap: $spacing-unit * 3;
+    padding: $spacing-unit * 2;
+
+    @media (min-width: $breakpoint-sm) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (min-width: $breakpoint-lg) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  &__empty {
+    text-align: center;
+    font-family: $font-family-primary;
+    color: $text-color;
+    font-size: 1.2rem;
+    padding: $spacing-unit * 3;
+  }
+}
+
+.post-card {
+  background: $hover-color;
+  border-radius: $border-radius;
+  overflow: hidden;
+  box-shadow: $shadow-lg;
+  border: 1px solid rgba($text-color, 0.05);
+  transition: $transition-transform;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  &__link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    padding: $spacing-unit * 2;
+  }
+
+  &__title {
+    font-family: $font-family-primary;
+    font-weight: $font-weight-semibold;
+    font-size: 1.5rem;
+    color: $text-color;
+    margin-bottom: $spacing-unit * 1.5;
+  }
+
+  &__date {
+    font-family: $font-family-primary;
+    color: rgba($text-color, 0.7);
+    font-size: 0.9rem;
+    margin-bottom: $spacing-unit * 1.5;
+  }
+
+  &__categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-unit;
+    margin-bottom: $spacing-unit * 1.5;
+  }
+
+  &__category {
+    background: rgba($accent-color, 0.1);
+    padding: $spacing-unit * 0.5 $spacing-unit;
+    border-radius: $border-radius;
+    font-size: 0.8rem;
+    color: $accent-color;
+  }
+
+  &__image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: $border-radius;
+  }
+}
+
+.pagination {
+  margin-top: $spacing-unit * 4;
+  display: flex;
+  justify-content: center;
+  gap: $spacing-unit;
+
+  &__button {
+    padding: $spacing-unit $spacing-unit * 1.5;
+    background: $hover-color;
+    border: 1px solid rgba($text-color, 0.1);
+    border-radius: $border-radius;
+    font-family: $font-family-primary;
+    font-weight: $font-weight-medium;
+    color: $text-color;
+    transition: $transition-base;
+    cursor: pointer;
+
+    &:hover {
+      background: $accent-color;
+      color: $primary-color;
+    }
+
+    &--active {
+      background: $accent-color;
+      color: $primary-color;
+      border-color: $accent-color;
+    }
+  }
+}
+</style>
