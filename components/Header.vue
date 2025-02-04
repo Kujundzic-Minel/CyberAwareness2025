@@ -1,6 +1,8 @@
 <template>
-  <nav class="header">
-    <button id="open-sidebar-button" class="header__toggle">☰</button>
+  <nav class="header" :class="{ 'header--show': isMenuOpen }">
+    <button id="open-sidebar-button" class="header__toggle" @click="toggleMenu">
+      ☰
+    </button>
     <ul class="header__list">
       <li class="header__item header__item--home">
         <NuxtLink class="header__link" to="/">Home</NuxtLink>
@@ -29,11 +31,32 @@
         >
       </li>
     </ul>
-    <div id="overlay" class="header__overlay" />
+    <div id="overlay" class="header__overlay" @click="closeMenu" />
   </nav>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const isMenuOpen = ref(false);
+
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+  if (isMenuOpen.value) {
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = `${scrollbarWidth}px`;
+  } else {
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+  }
+};
+
+const closeMenu = () => {
+  isMenuOpen.value = false;
+  document.body.style.overflow = '';
+  document.body.style.paddingRight = '';
+};
+</script>
 
 <style lang="scss" scoped>
 .header {
@@ -103,6 +126,12 @@
     border: none;
     padding: 1em;
     cursor: pointer;
+    color: $text-color;
+    font-size: 1.5rem;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 11;
   }
 
   &__overlay {
@@ -113,9 +142,15 @@
     display: none;
   }
 
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: 860px) {
     &__toggle {
       display: block;
+      position: fixed;
+      top: 0.5rem;
+      right: 1rem;
+      padding: 0.5rem;
+      font-size: 1.75rem;
+      z-index: 11;
     }
 
     & {
@@ -125,8 +160,10 @@
       height: 100vh;
       width: min(15em, 100%);
       z-index: 10;
+      background-color: $primary-color;
       border-left: 1px solid $hover-color;
       transition: right 300ms ease-in-out;
+      overflow-y: auto;
 
       &--show {
         right: 0;
@@ -140,11 +177,23 @@
     &__list {
       width: 100%;
       flex-direction: column;
+      padding-top: 4rem;
+    }
+
+    &__item {
+      width: 100%;
+
+      &--home {
+        margin-right: 0;
+        order: -1;
+      }
     }
 
     &__link {
       width: 100%;
-      padding-left: 2.5em;
+      padding: 1rem 2rem;
+      justify-content: flex-start;
+      align-items: center;
 
       &.router-link-active {
         background-color: $hover-color;
@@ -153,12 +202,6 @@
           bottom: 0;
           width: 4px;
           height: 100%;
-        }
-      }
-
-      &--login {
-        &.router-link-active {
-          background-color: $accent-color;
         }
       }
     }
