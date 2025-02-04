@@ -84,6 +84,15 @@ const { data: homepage } = await useSanityQuery<Homepage>(groq`
   },
 }
 `);
+
+const subscriptionsWithDisabled = computed(() => {
+  if (!homepage.value?.subscriptions) return [];
+
+  return homepage.value.subscriptions.map((sub) => ({
+    ...sub,
+    isDisabled: sub.title.toLowerCase().includes('basic'),
+  }));
+});
 </script>
 
 <template>
@@ -96,7 +105,7 @@ const { data: homepage } = await useSanityQuery<Homepage>(groq`
     />
     <HomeSubscription
       v-if="homepage.subscriptions"
-      :subscriptions="homepage.subscriptions"
+      :subscriptions="subscriptionsWithDisabled"
     />
     <HomeFAQ v-if="homepage.faq" :faq="homepage.faq" />
   </div>

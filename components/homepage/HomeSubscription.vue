@@ -4,6 +4,7 @@ interface Subscription {
   description: string;
   price: string;
   features: string[];
+  isDisabled?: boolean;
   cta?: { label: string; url: string };
 }
 
@@ -20,6 +21,7 @@ defineProps<{
         v-for="subscription in subscriptions"
         :key="subscription.title"
         class="subscriptions__card"
+        :class="{ 'subscriptions__card--disabled': subscription.isDisabled }"
       >
         <h3 class="subscriptions__card-title">{{ subscription.title }}</h3>
         <div class="subscriptions__card-price">{{ subscription.price }}</div>
@@ -35,10 +37,19 @@ defineProps<{
             {{ feature }}
           </li>
         </ul>
-        <div v-if="subscription.cta" class="subscriptions__card-action">
+        <div
+          v-if="subscription.cta && !subscription.isDisabled"
+          class="subscriptions__card-action"
+        >
           <a :href="subscription.cta.url" class="subscriptions__card-button">{{
             subscription.cta.label
           }}</a>
+        </div>
+        <div
+          v-if="subscription.isDisabled"
+          class="subscriptions__card-disabled-message"
+        >
+          Already selected
         </div>
       </div>
     </div>
@@ -109,12 +120,6 @@ defineProps<{
     &-feature {
       padding: $spacing-unit 0;
       color: rgba($text-color, 0.8);
-
-      &::before {
-        content: '✓';
-        color: $accent-color;
-        margin-right: $spacing-unit;
-      }
     }
 
     &-button {
@@ -130,6 +135,40 @@ defineProps<{
       &:hover {
         background: darken($accent-color, 10%);
       }
+    }
+
+    &--disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none !important;
+
+      &:hover {
+        transform: none !important;
+      }
+
+      .subscriptions__card-price,
+      .subscriptions__card-title,
+      .subscriptions__card-description,
+      .subscriptions__card-feature {
+        color: $disabled-color;
+      }
+
+      .subscriptions__card-feature::before {
+        color: $disabled-color;
+      }
+    }
+
+    &-disabled-message {
+      color: $accent-color;
+      font-style: normal;
+      margin-top: $spacing-unit * 2;
+      font-size: 1.1rem;
+      font-weight: $font-weight-semibold;
+      padding: $spacing-unit * 1.5;
+      border: 2px solid $accent-color;
+      border-radius: $border-radius;
+      display: inline-block;
+      background-color: rgba($accent-color, 0.1);
     }
   }
 
