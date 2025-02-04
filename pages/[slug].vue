@@ -26,7 +26,7 @@ useSeoMeta({
 
 <template>
   <div class="article-page">
-    <div v-if="post" class="article-page__header"></div>
+    <div v-if="post" class="article-page__header">
       <div class="article-page__header-overlay" />
       <img
         v-if="post.image"
@@ -300,7 +300,7 @@ useSeoMeta({
 @media (max-width: $breakpoint-md) {
   .article-page {
     &__header {
-      height: 40vh; // Réduit de 50vh à 40vh
+      height: 40vh;
 
       &-title {
         font-size: 2.5rem;
@@ -308,7 +308,7 @@ useSeoMeta({
     }
 
     &__main {
-      margin-top: -80px; // Augmenté de -40px à -80px
+      margin-top: -80px;
     }
   }
 
