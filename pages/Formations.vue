@@ -3,6 +3,7 @@ import pb from '@/services/pocketbase';
 import { ref, computed } from 'vue';
 import { useAsyncData } from '#imports';
 import SearchBar from '~/components/SearchBar.vue';
+import Pagination from '~/components/Pagination.vue';
 
 const searchQuery = ref('');
 const currentPage = ref(1);
@@ -67,7 +68,7 @@ const paginatedFormations = computed(() => {
   return filteredFormations.value.slice(start, start + itemsPerPage);
 });
 
-const onPageClick = (i: number) => {
+const _onPageClick = (i: number) => {
   currentPage.value = i;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
@@ -104,19 +105,7 @@ const onPageClick = (i: number) => {
       </template>
     </div>
 
-    <nav class="pagination">
-      <button
-        v-for="i in totalPages"
-        :key="i"
-        :class="[
-          'pagination__button',
-          { 'pagination__button--active': currentPage === i },
-        ]"
-        @click="onPageClick(i)"
-      >
-        {{ i }}
-      </button>
-    </nav>
+    <Pagination v-model:current-page="currentPage" :total-pages="totalPages" />
   </div>
 </template>
 
@@ -166,36 +155,6 @@ const onPageClick = (i: number) => {
 
   &--error {
     color: $error-color;
-  }
-}
-
-.pagination {
-  margin-top: $spacing-unit * 4;
-  display: flex;
-  justify-content: center;
-  gap: $spacing-unit;
-
-  &__button {
-    padding: $spacing-unit $spacing-unit * 1.5;
-    background: $hover-color;
-    border: 1px solid rgba($text-color, 0.1);
-    border-radius: $border-radius;
-    font-family: $font-family-primary;
-    font-weight: $font-weight-medium;
-    color: $text-color;
-    cursor: pointer;
-    transition: $transition-base;
-
-    &:hover {
-      background: $accent-color;
-      color: $primary-color;
-    }
-
-    &--active {
-      background: $accent-color;
-      color: $primary-color;
-      border-color: $accent-color;
-    }
   }
 }
 </style>

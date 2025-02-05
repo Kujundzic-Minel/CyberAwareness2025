@@ -21,7 +21,7 @@ const onCategoryClick = (categorySlug: string) => {
   page.value = 1;
 };
 
-function onPageClick(i: number) {
+function _onPageClick(i: number) {
   page.value = i;
 }
 
@@ -120,19 +120,7 @@ const totalPages = computed(() => {
         </div>
       </section>
 
-      <nav class="posts-page__pagination pagination">
-        <button
-          v-for="i in totalPages"
-          :key="i"
-          :class="[
-            'pagination__button',
-            { 'pagination__button--active': page === i },
-          ]"
-          @click="onPageClick(i)"
-        >
-          {{ i }}
-        </button>
-      </nav>
+      <Pagination v-model:current-page="page" :total-pages="totalPages" />
     </main>
   </div>
 </template>
@@ -275,36 +263,6 @@ const totalPages = computed(() => {
     height: 200px;
     object-fit: cover;
     border-radius: $border-radius;
-  }
-}
-
-.pagination {
-  margin-top: $spacing-unit * 4;
-  display: flex;
-  justify-content: center;
-  gap: $spacing-unit;
-
-  &__button {
-    padding: $spacing-unit $spacing-unit * 1.5;
-    background: $hover-color;
-    border: 1px solid rgba($text-color, 0.1);
-    border-radius: $border-radius;
-    font-family: $font-family-primary;
-    font-weight: $font-weight-medium;
-    color: $text-color;
-    transition: $transition-base;
-    cursor: pointer;
-
-    &:hover {
-      background: $accent-color;
-      color: $primary-color;
-    }
-
-    &--active {
-      background: $accent-color;
-      color: $primary-color;
-      border-color: $accent-color;
-    }
   }
 }
 </style>
