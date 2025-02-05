@@ -19,9 +19,9 @@
       <li class="header__item">
         <NuxtLink class="header__link" to="/quizz">Quizz</NuxtLink>
       </li>
-      <li class="header__item">
+      <!-- <li class="header__item">
         <NuxtLink class="header__link" to="/about">About</NuxtLink>
-      </li>
+      </li> -->
       <li class="header__item">
         <NuxtLink class="header__link" to="/contact">Contact</NuxtLink>
       </li>
