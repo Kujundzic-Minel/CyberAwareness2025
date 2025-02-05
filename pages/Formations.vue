@@ -2,6 +2,7 @@
 import pb from '@/services/pocketbase';
 import { ref, computed } from 'vue';
 import { useAsyncData } from '#imports';
+import SearchBar from '~/components/SearchBar.vue';
 
 const searchQuery = ref('');
 const currentPage = ref(1);
@@ -82,17 +83,11 @@ const onPageClick = (i: number) => {
     </div>
 
     <div class="formations-page__search">
-      <div class="search-wrapper">
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="Rechercher une formation..."
-          class="formations-page__search-input"
-        />
-        <span v-if="searchQuery" class="search-count">
-          {{ filteredFormations.length }} résultat(s)
-        </span>
-      </div>
+      <SearchBar
+        v-model="searchQuery"
+        placeholder="Rechercher une formation..."
+        :result-count="filteredFormations.length"
+      />
     </div>
 
     <div class="formations-grid">
@@ -153,45 +148,7 @@ const onPageClick = (i: number) => {
     margin-bottom: 2rem;
     display: flex;
     justify-content: center;
-
-    &-input {
-      width: 100%;
-      max-width: 500px;
-      padding: 1rem;
-      border: 1px solid $hover-color;
-      border-radius: 8px;
-      background-color: darken($primary-color, 3%);
-      color: $text-color;
-      font-size: 1rem;
-      padding-right: 6rem; // Espace pour le compteur de résultats
-
-      &:focus {
-        outline: none;
-        border-color: $accent-color;
-        box-shadow: 0 0 0 2px rgba($accent-color, 0.1);
-      }
-
-      &::placeholder {
-        color: rgba($text-color, 0.6);
-      }
-    }
   }
-}
-
-.search-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-.search-count {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.9rem;
-  color: rgba($text-color, 0.6);
 }
 
 .formations-grid {

@@ -24,17 +24,11 @@
     </div>
 
     <div class="quiz-page__search">
-      <div class="search-wrapper">
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="Rechercher un quiz..."
-          class="quiz-page__search-input"
-        />
-        <span v-if="searchQuery" class="search-count">
-          {{ filteredThemes.length }} résultat(s)
-        </span>
-      </div>
+      <SearchBar
+        v-model="searchQuery"
+        placeholder="Rechercher un quiz..."
+        :result-count="filteredThemes.length"
+      />
     </div>
 
     <div class="quiz-page__themes">
@@ -55,6 +49,7 @@
 import { ref, computed, onMounted } from 'vue';
 import pb from '@/services/pocketbase';
 import ThemeCard from '~/components/quiz/ThemeCard.vue';
+import SearchBar from '~/components/SearchBar.vue';
 
 interface Theme {
   id: string;
@@ -123,28 +118,6 @@ onMounted(async () => {
     margin-bottom: 2rem;
     display: flex;
     justify-content: center;
-
-    &-input {
-      width: 100%;
-      max-width: 500px;
-      padding: 1rem;
-      border: 1px solid $hover-color;
-      border-radius: 8px;
-      background-color: darken($primary-color, 3%);
-      color: $text-color;
-      font-size: 1rem;
-      padding-right: 6rem; // Espace pour le compteur de résultats
-
-      &:focus {
-        outline: none;
-        border-color: $accent-color;
-        box-shadow: 0 0 0 2px rgba($accent-color, 0.1);
-      }
-
-      &::placeholder {
-        color: rgba($text-color, 0.6);
-      }
-    }
   }
 
   &__themes {
@@ -180,22 +153,6 @@ onMounted(async () => {
     color: $text-color;
     font-size: 1.1rem;
   }
-}
-
-.search-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-.search-count {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.9rem;
-  color: rgba($text-color, 0.6);
 }
 
 .no-results {
