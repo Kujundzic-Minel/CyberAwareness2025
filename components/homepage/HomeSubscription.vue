@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Button from '@/components/Button.vue';
+
 interface Subscription {
   title: string;
   description: string;
@@ -37,19 +39,17 @@ defineProps<{
             {{ feature }}
           </li>
         </ul>
-        <div
-          v-if="subscription.cta && !subscription.isDisabled"
-          class="subscriptions__card-action"
-        >
-          <a :href="subscription.cta.url" class="subscriptions__card-button">{{
-            subscription.cta.label
-          }}</a>
-        </div>
-        <div
-          v-if="subscription.isDisabled"
-          class="subscriptions__card-disabled-message"
-        >
-          Already selected
+        <div class="subscriptions__card-action">
+          <Button
+            v-if="subscription.cta"
+            :variant="subscription.isDisabled ? 'primary' : 'primary'"
+            :disabled="subscription.isDisabled"
+            class="subscriptions__card-button"
+          >
+            {{
+              subscription.isDisabled ? 'Current Plan' : subscription.cta?.label
+            }}
+          </Button>
         </div>
       </div>
     </div>
@@ -124,24 +124,15 @@ defineProps<{
       text-align: justify;
     }
 
-    &-button {
-      display: inline-block;
-      padding: $spacing-unit * 2 $spacing-unit * 4;
-      background: $accent-color;
-      color: white;
-      text-decoration: none;
-      border-radius: 30px;
-      font-weight: $font-weight-semibold;
-      transition: $transition-base;
-
-      &:hover {
-        background: darken($accent-color, 10%);
-      }
+    &-action {
+      margin-top: $spacing-unit * 3;
+      display: flex;
+      justify-content: center;
     }
 
     &--disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
+      opacity: 1; // Changer l'opacité pour plus de visibilité
+      cursor: default;
       transform: none !important;
 
       &:hover {
@@ -158,19 +149,6 @@ defineProps<{
       .subscriptions__card-feature::before {
         color: $disabled-color;
       }
-    }
-
-    &-disabled-message {
-      color: $accent-color;
-      font-style: normal;
-      margin-top: $spacing-unit * 2;
-      font-size: 1.1rem;
-      font-weight: $font-weight-semibold;
-      padding: $spacing-unit * 1.5;
-      border: 2px solid $accent-color;
-      border-radius: $border-radius;
-      display: inline-block;
-      background-color: rgba($accent-color, 0.1);
     }
   }
 

@@ -91,11 +91,18 @@ withDefaults(
   }
 
   &--disabled {
-    background-color: $hover-color;
-    color: darken($text-color, 40%);
+    background-color: darken($accent-color, 15%);
+    color: rgba($text-color, 0.9);
     cursor: not-allowed;
     transform: none;
     border-color: transparent;
+    opacity: 0.85;
+    box-shadow: $shadow-sm;
+
+    &:hover {
+      transform: none;
+      box-shadow: $shadow-sm;
+    }
   }
 
   &:active:not(:disabled) {
