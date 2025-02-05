@@ -84,8 +84,6 @@ const handlePayment = async () => {
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/foundations/_variables.scss';
-
 .payment__form {
   max-width: 600px;
   margin: 0 auto;

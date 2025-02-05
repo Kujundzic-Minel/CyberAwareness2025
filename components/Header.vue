@@ -8,6 +8,9 @@
         <NuxtLink class="header__link" to="/">Home</NuxtLink>
       </li>
       <li class="header__item">
+        <NuxtLink class="header__link" to="/formations">Formations</NuxtLink>
+      </li>
+      <li class="header__item">
         <NuxtLink class="header__link" to="/posts">Posts</NuxtLink>
       </li>
       <li class="header__item">
