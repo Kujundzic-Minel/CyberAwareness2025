@@ -109,6 +109,7 @@ defineProps<{
       color: rgba($text-color, 0.8);
       margin-bottom: $spacing-unit * 4;
       line-height: 1.6;
+      text-align: justify;
     }
 
     &-features {
@@ -120,6 +121,7 @@ defineProps<{
     &-feature {
       padding: $spacing-unit 0;
       color: rgba($text-color, 0.8);
+      text-align: justify;
     }
 
     &-button {

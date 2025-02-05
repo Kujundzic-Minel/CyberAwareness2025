@@ -65,6 +65,7 @@ defineProps<{
     color: rgba($text-color, 0.8);
     line-height: 1.6;
     font-weight: $font-weight-regular;
+    text-align: justify;
   }
 
   @media (max-width: $breakpoint-sm) {

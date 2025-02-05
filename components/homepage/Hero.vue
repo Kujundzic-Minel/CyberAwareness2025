@@ -111,6 +111,7 @@ defineProps<{
     max-width: 600px;
     margin-bottom: $spacing-unit * 4;
     line-height: 1.6;
+    text-align: justify;
   }
 
   &__stats {

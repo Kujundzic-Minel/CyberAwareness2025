@@ -113,6 +113,7 @@ defineProps<{
     color: $text-color;
     line-height: 1.6;
     font-weight: $font-weight-regular;
+    text-align: justify;
   }
 }
 </style>
