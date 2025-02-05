@@ -60,6 +60,7 @@ const { data: formation } = useAsyncData(
     color: $text-color;
     margin-bottom: $spacing-unit * 3;
     font-weight: $font-weight-bold;
+    text-align: justify;
   }
 
   .description {
@@ -68,6 +69,7 @@ const { data: formation } = useAsyncData(
     line-height: 1.8;
     margin-bottom: $spacing-unit * 4;
     opacity: 0.9;
+    text-align: justify;
   }
 
   .formation-info {
@@ -79,6 +81,7 @@ const { data: formation } = useAsyncData(
     p {
       color: $accent-color;
       font-size: 1.2rem;
+      text-align: justify;
     }
   }
 
@@ -98,11 +101,13 @@ const { data: formation } = useAsyncData(
       color: $accent-color;
       margin-bottom: $spacing-unit * 2;
       font-size: 1.5rem;
+      text-align: justify;
     }
 
     p {
       color: $text-color;
       margin-bottom: $spacing-unit * 2;
+      text-align: justify;
 
       &:last-child {
         margin-bottom: 0;
@@ -112,6 +117,7 @@ const { data: formation } = useAsyncData(
     a {
       color: $accent-color;
       text-decoration: none;
+      text-align: justify;
 
       &:hover {
         text-decoration: underline;

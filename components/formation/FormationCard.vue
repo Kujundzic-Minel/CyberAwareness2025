@@ -72,6 +72,7 @@ const truncateDescription = (text: string, length: number) => {
     font-size: 1.5rem;
     margin-bottom: $spacing-unit * 2;
     font-weight: $font-weight-semibold;
+    text-align: justify;
   }
 
   p {
@@ -79,6 +80,7 @@ const truncateDescription = (text: string, length: number) => {
     opacity: 0.8;
     margin-bottom: $spacing-unit * 2;
     line-height: 1.6;
+    text-align: justify;
   }
 
   .formation-details {
@@ -90,6 +92,7 @@ const truncateDescription = (text: string, length: number) => {
     p {
       margin: 0;
       color: $accent-color;
+      text-align: justify;
     }
   }
 
@@ -114,6 +117,7 @@ const truncateDescription = (text: string, length: number) => {
       opacity: 0.8;
       font-size: 0.9rem;
       text-decoration: none;
+      text-align: justify;
     }
 
     a:hover {
