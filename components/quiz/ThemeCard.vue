@@ -12,7 +12,7 @@
 import { useRouter } from 'vue-router';
 
 interface Theme {
-  id: string; // Ajout de l'id
+  id: string;
   title: string;
   description: string;
   slug: string;
@@ -32,8 +32,6 @@ const goToTheme = () => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/foundations/_variables.scss';
-
 .theme-card {
   background-color: $primary-color;
   border: 1px solid $hover-color;

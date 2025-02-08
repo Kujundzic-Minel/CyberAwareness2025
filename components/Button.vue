@@ -3,13 +3,17 @@
     :type="type"
     :class="['button', `button--${variant}`, { 'button--disabled': disabled }]"
     :disabled="disabled"
-    @click="$emit('click')"
+    @click.stop="handleClick"
   >
     <slot />
   </button>
 </template>
 
 <script setup lang="ts">
+const emit = defineEmits<{
+  (e: 'click', event: MouseEvent): void;
+}>();
+
 withDefaults(
   defineProps<{
     variant?: 'primary' | 'secondary' | 'success' | 'warning';
@@ -22,6 +26,12 @@ withDefaults(
     disabled: false,
   }
 );
+
+const handleClick = (event: MouseEvent) => {
+  event.preventDefault();
+  if (!event.target || (event.target as HTMLButtonElement).disabled) return;
+  emit('click', event);
+};
 </script>
 
 <style lang="scss" scoped>

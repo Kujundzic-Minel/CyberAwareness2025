@@ -46,10 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
 import pb from '@/services/pocketbase';
-import ThemeCard from '~/components/quiz/ThemeCard.vue';
-import SearchBar from '~/components/SearchBar.vue';
 
 interface Theme {
   id: string;

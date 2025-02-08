@@ -38,7 +38,12 @@
         >
           Valider
         </Button>
-        <Button :disabled="answered" variant="secondary" @click="toggleHint">
+        <Button
+          type="button"
+          :disabled="answered"
+          variant="secondary"
+          @click="toggleHint"
+        >
           {{ hintVisible ? "Masquer l'indice" : "Afficher l'indice" }}
         </Button>
       </div>
@@ -83,7 +88,6 @@ const answered = ref(false);
 const hintVisible = ref(false);
 const isCorrect = ref(false);
 
-// Réinitialiser l'état quand la question change
 watch(
   () => props.quiz,
   () => {
@@ -95,8 +99,12 @@ watch(
   { deep: true }
 );
 
-const toggleHint = () => {
+const toggleHint = (event?: MouseEvent) => {
+  if (event) {
+    event.preventDefault();
+  }
   hintVisible.value = !hintVisible.value;
+  console.log('Indice:', hintVisible.value);
 };
 
 const submitAnswer = () => {
