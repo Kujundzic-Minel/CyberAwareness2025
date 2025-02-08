@@ -8,7 +8,9 @@
         Vous souhaitez en savoir plus sur nos services ? N'hésitez pas à nous
         contacter.
       </p>
-      <button class="contact__button">Nous contacter</button>
+      <button class="contact__button">
+        <NuxtLink to="/contact">Nous contacter</NuxtLink>
+      </button>
     </div>
   </section>
 </template>
