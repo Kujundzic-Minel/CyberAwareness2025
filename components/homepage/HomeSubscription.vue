@@ -46,9 +46,10 @@ defineProps<{
             :disabled="subscription.isDisabled"
             class="subscriptions__card-button"
           >
-            {{
-              subscription.isDisabled ? 'Current Plan' : subscription.cta?.label
-            }}
+            <template v-if="subscription.isDisabled"> Current Plan </template>
+            <NuxtLink v-else to="/PremiumSub" class="subscriptions__card-link">
+              {{ subscription.cta?.label }}
+            </NuxtLink>
           </Button>
         </div>
       </div>
@@ -131,7 +132,7 @@ defineProps<{
     }
 
     &--disabled {
-      opacity: 1; // Changer l'opacité pour plus de visibilité
+      opacity: 1;
       cursor: default;
       transform: none !important;
 
@@ -149,6 +150,14 @@ defineProps<{
       .subscriptions__card-feature::before {
         color: $disabled-color;
       }
+    }
+
+    &-link {
+      color: inherit;
+      text-decoration: none;
+      display: block;
+      width: 100%;
+      height: 100%;
     }
   }
 
