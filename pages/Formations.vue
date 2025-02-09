@@ -11,6 +11,7 @@ const itemsPerPage = 3;
 
 interface Formation {
   id: string;
+  collectionId: string; // Ajout de collectionId
   title: string;
   description: string;
   address: string;
@@ -31,10 +32,11 @@ const {
     const records = await pb.collection('formations').getList(1, 50);
     return records.items.map((record) => ({
       id: record.id,
+      collectionId: record.collectionId,
       title: record.title,
       description: record.description,
       address: record.address,
-      picture: record.picture || '/placeholder.png',
+      picture: record.picture,
       mail: record.mail,
       phone_number: record.phone_number,
       certification: record.certification,
@@ -96,13 +98,13 @@ const _onPageClick = (i: number) => {
       <p v-else-if="error" class="formations-message formations-message--error">
         Une erreur s'est produite
       </p>
-      <template v-else>
+      <ClientOnly>
         <FormationCard
           v-for="formation in paginatedFormations"
           :key="formation.id"
           :formation="formation"
         />
-      </template>
+      </ClientOnly>
     </div>
 
     <Pagination v-model:current-page="currentPage" :total-pages="totalPages" />

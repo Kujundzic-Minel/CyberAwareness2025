@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import _pb from '@/services/pocketbase';
+
 interface Formation {
   id: string;
+  collectionId: string;
   title: string;
   description: string;
   address: string;
@@ -24,7 +27,6 @@ const truncateDescription = (text: string, length: number) => {
 <template>
   <NuxtLink :to="`/formation/${formation.id}`" class="formation-card">
     <div>
-      <img :src="formation.picture" :alt="formation.title" />
       <h3>{{ formation.title }}</h3>
       <p>{{ truncateDescription(formation.description, 150) }}</p>
       <div class="formation-details">
@@ -57,14 +59,6 @@ const truncateDescription = (text: string, length: number) => {
     transform: translateY(-4px);
     box-shadow: $shadow-lg;
     border-color: $accent-color;
-  }
-
-  img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: $border-radius;
-    margin-bottom: $spacing-unit * 2;
   }
 
   h3 {
@@ -102,28 +96,6 @@ const truncateDescription = (text: string, length: number) => {
     padding: $spacing-unit $spacing-unit * 2;
     border-radius: $border-radius;
     font-size: 0.9rem;
-  }
-
-  .formation-contact {
-    border-top: 1px solid $hover-color;
-    padding-top: $spacing-unit * 2;
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-unit;
-
-    p,
-    a {
-      color: $text-color;
-      opacity: 0.8;
-      font-size: 0.9rem;
-      text-decoration: none;
-      text-align: justify;
-    }
-
-    a:hover {
-      color: $accent-color;
-      opacity: 1;
-    }
   }
 }
 </style>

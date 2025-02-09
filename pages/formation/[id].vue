@@ -13,7 +13,6 @@ const { data: formation } = useAsyncData(
 
 <template>
   <div v-if="formation" class="formation-detail">
-    <img :src="formation.picture" :alt="formation.title" />
     <h1>{{ formation.title }}</h1>
     <p class="description">{{ formation.description }}</p>
 
@@ -46,14 +45,6 @@ const { data: formation } = useAsyncData(
   max-width: $container-max-width;
   margin: 0 auto;
   padding: $spacing-unit * 4;
-
-  img {
-    width: 100%;
-    height: 400px;
-    object-fit: cover;
-    border-radius: $border-radius;
-    margin-bottom: $spacing-unit * 4;
-  }
 
   h1 {
     font-size: 2.5rem;
