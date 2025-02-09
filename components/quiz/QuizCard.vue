@@ -32,9 +32,10 @@
       </div>
       <div class="quiz-card__actions">
         <Button
-          type="submit"
+          type="button"
           :disabled="!selectedAnswer || answered"
           variant="primary"
+          @click="submitAnswer"
         >
           Valider
         </Button>
@@ -108,14 +109,17 @@ const toggleHint = (event?: MouseEvent) => {
 };
 
 const submitAnswer = () => {
-  if (!selectedAnswer.value || answered.value) return;
+  if (!selectedAnswer.value || answered.value) {
+    return;
+  }
 
   answered.value = true;
   isCorrect.value = selectedAnswer.value === props.quiz.correct_answer;
-  console.log('Réponse donnée:', selectedAnswer.value);
-  console.log('Réponse correcte:', props.quiz.correct_answer);
-  console.log('Est correcte:', isCorrect.value);
-  emit('answer-selected', isCorrect.value);
+
+  // Ajout d'un délai pour l'animation
+  setTimeout(() => {
+    emit('answer-selected', isCorrect.value);
+  }, 500);
 };
 
 const resultMessage = computed(() => {
