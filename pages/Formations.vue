@@ -1,9 +1,5 @@
 <script setup lang="ts">
 import pb from '@/services/pocketbase';
-import { ref, computed } from 'vue';
-import { useAsyncData } from '#imports';
-import SearchBar from '~/components/SearchBar.vue';
-import Pagination from '~/components/Pagination.vue';
 
 const searchQuery = ref('');
 const currentPage = ref(1);
