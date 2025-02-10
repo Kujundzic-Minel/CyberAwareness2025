@@ -119,10 +119,29 @@ const _onPageClick = (i: number) => {
   }
 
   &__title {
-    font-size: 2.5rem;
-    color: $accent-color;
-    margin-bottom: $spacing-unit * 2;
+    font-family: $font-family-primary;
     font-weight: $font-weight-bold;
+    color: $text-color;
+    margin-bottom: $spacing-unit * 4;
+    font-size: 2.5rem;
+    text-align: center;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -$spacing-unit;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(
+        90deg,
+        $accent-color,
+        darken($accent-color, 15%)
+      );
+      border-radius: $border-radius;
+    }
   }
 
   &__subtitle {
@@ -135,6 +154,31 @@ const _onPageClick = (i: number) => {
     margin-bottom: 2rem;
     display: flex;
     justify-content: center;
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    padding: $spacing-unit * 3;
+
+    &__title {
+      font-size: 2rem;
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    padding: $spacing-unit * 2;
+
+    &__title {
+      font-size: 1.75rem;
+      margin-bottom: $spacing-unit * 3;
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-unit;
+
+    &__title {
+      font-size: 1.5rem;
+    }
   }
 }
 
