@@ -99,6 +99,7 @@ const subscriptionsWithDisabled = computed(() => {
   <div v-if="homepage">
     <Hero v-if="homepage.hero" :hero="homepage.hero" />
     <HomeFeature v-if="homepage.features" :features="homepage.features" />
+    <PasswordTester />
     <HomeTestimonial
       v-if="homepage.testimonials"
       :testimonials="homepage.testimonials"
