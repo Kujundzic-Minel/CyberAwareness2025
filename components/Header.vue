@@ -3,7 +3,7 @@
     <button id="open-sidebar-button" class="header__toggle" @click="toggleMenu">
       ☰
     </button>
-    <ul class="header__list">
+    <ul class="header__list" @click="handleLinkClick">
       <li class="header__item header__item--home">
         <NuxtLink class="header__link" to="/">Home</NuxtLink>
       </li>
@@ -40,6 +40,11 @@
 
 <script setup lang="ts">
 const isMenuOpen = ref(false);
+const route = useRoute();
+
+watch(route, () => {
+  closeMenu();
+});
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
@@ -58,6 +63,12 @@ const closeMenu = () => {
   isMenuOpen.value = false;
   document.body.style.overflow = '';
   document.body.style.paddingRight = '';
+};
+
+const handleLinkClick = () => {
+  if (window.innerWidth <= 860) {
+    closeMenu();
+  }
 };
 </script>
 
