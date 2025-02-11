@@ -99,7 +99,10 @@ const subscriptionsWithDisabled = computed(() => {
   <div v-if="homepage">
     <Hero v-if="homepage.hero" :hero="homepage.hero" />
     <HomeFeature v-if="homepage.features" :features="homepage.features" />
-    <PasswordTester />
+    <div class="password-tools">
+      <PasswordTester />
+      <GenerateurPassword />
+    </div>
     <HomeTestimonial
       v-if="homepage.testimonials"
       :testimonials="homepage.testimonials"
@@ -123,5 +126,18 @@ const subscriptionsWithDisabled = computed(() => {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+}
+
+.password-tools {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-unit * 4;
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: $spacing-unit * 4;
+
+  @media (max-width: $breakpoint-md) {
+    padding: $spacing-unit * 2;
+  }
 }
 </style>
