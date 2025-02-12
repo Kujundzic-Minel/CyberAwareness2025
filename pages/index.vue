@@ -103,9 +103,12 @@ const subscriptionsWithDisabled = computed(() => {
   <div v-if="homepage">
     <Hero v-if="homepage.hero" :hero="homepage.hero" />
     <HomeFeature v-if="homepage.features" :features="homepage.features" />
-    <div class="password-tools">
-      <PasswordTester />
-      <GenerateurPassword />
+    <div class="password-section">
+      <h2 class="section-title">Sécurité des mots de passe</h2>
+      <div class="password-tools">
+        <PasswordTester />
+        <GenerateurPassword />
+      </div>
     </div>
     <HomeTestimonial
       v-if="homepage.testimonials"
@@ -133,20 +136,40 @@ const subscriptionsWithDisabled = computed(() => {
   padding: 2rem;
 
   @media (max-width: $breakpoint-md) {
-    margin-top: 1rem; // Ajoute un peu d'espace en haut en mobile
+    margin-top: 1rem;
+  }
+}
+
+.password-section {
+  padding: $spacing-unit * 8 $spacing-unit * 4;
+  max-width: $container-max-width;
+  margin: 0 auto;
+
+  .section-title {
+    text-align: center;
+    margin-bottom: $spacing-unit * 6;
+    font-size: 2.5rem;
+    font-family: $font-family-primary;
+    font-weight: $font-weight-semibold;
+    color: $text-color;
   }
 }
 
 .password-tools {
   display: flex;
-  flex-direction: column;
   gap: $spacing-unit * 4;
-  max-width: $container-max-width;
   margin: 0 auto;
-  padding: $spacing-unit * 4;
+  flex-direction: row;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    padding: $spacing-unit * 3;
+  }
 
   @media (max-width: $breakpoint-md) {
+    flex-direction: column;
     padding: $spacing-unit * 2;
+    gap: $spacing-unit * 2;
   }
 }
 </style>

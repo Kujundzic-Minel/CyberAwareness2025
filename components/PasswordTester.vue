@@ -130,8 +130,9 @@ const estimatedCrackTime = computed(() => {
   background: $hover-color;
   border-radius: $border-radius;
   padding: $spacing-unit * 4;
-  max-width: $container-max-width / 2;
-  margin: ($spacing-unit * 4) auto;
+  max-width: 100%;
+  flex: 1;
+  margin: 0;
   box-shadow: $shadow-md;
   transition: $transition-base;
 
@@ -226,11 +227,14 @@ const estimatedCrackTime = computed(() => {
     margin-right: $spacing-unit;
     font-weight: $font-weight-bold;
   }
-}
 
-@media (max-width: $breakpoint-md) {
-  .password {
-    margin: $spacing-unit * 2;
+  @media (max-width: 1024px) {
+    margin: 0;
+    width: 100%;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    margin: 0;
     padding: $spacing-unit * 2;
 
     &__title {

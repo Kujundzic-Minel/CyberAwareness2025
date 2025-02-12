@@ -135,8 +135,9 @@ const copyToClipboard = async () => {
   background: $hover-color;
   border-radius: $border-radius;
   padding: $spacing-unit * 4;
-  max-width: $container-max-width / 2;
-  margin: ($spacing-unit * 4) auto;
+  max-width: 100%;
+  flex: 1;
+  margin: 0;
   box-shadow: $shadow-md;
   transition: $transition-base;
 
@@ -145,6 +146,7 @@ const copyToClipboard = async () => {
     box-shadow: $shadow-lg;
   }
 
+  // Conserver les styles de base
   &__title {
     color: $text-color;
     font-family: $font-family-primary;
@@ -158,14 +160,19 @@ const copyToClipboard = async () => {
     display: flex;
     gap: $spacing-unit * 2;
     margin-bottom: $spacing-unit * 3;
+
+    @media (max-width: $breakpoint-md) {
+      flex-direction: column;
+      gap: $spacing-unit;
+    }
   }
 
   &__password {
     flex: 1;
     padding: $spacing-unit * 1.5;
-    background: $primary-color;
     border: 2px solid rgba($text-color, 0.1);
     border-radius: $border-radius;
+    background: $primary-color;
     color: $text-color;
     font-family: $font-family-primary;
     font-size: $spacing-unit * 2;
@@ -176,27 +183,7 @@ const copyToClipboard = async () => {
     }
   }
 
-  &__copy {
-    padding: $spacing-unit * 1.5 $spacing-unit * 3;
-    background: $accent-color;
-    border: none;
-    border-radius: $border-radius;
-    color: white;
-    cursor: pointer;
-    font-family: $font-family-primary;
-    font-weight: $font-weight-medium;
-    transition: $transition-base;
-
-    &:hover {
-      background: darken($accent-color, 10%);
-    }
-
-    &:disabled {
-      background: $disabled-color;
-      cursor: not-allowed;
-    }
-  }
-
+  // Styles des options et boutons
   &__options {
     margin-bottom: $spacing-unit * 3;
   }
@@ -247,51 +234,54 @@ const copyToClipboard = async () => {
     }
   }
 
+  &__copy {
+    padding: $spacing-unit * 1.5 $spacing-unit * 3;
+    background: $accent-color;
+    border: none;
+    border-radius: $border-radius;
+    color: white;
+    cursor: pointer;
+    font-family: $font-family-primary;
+    font-weight: $font-weight-medium;
+    transition: $transition-base;
+
+    &:hover {
+      background: darken($accent-color, 10%);
+    }
+
+    &:disabled {
+      background: $disabled-color;
+      cursor: not-allowed;
+    }
+  }
+
   @media (max-width: $breakpoint-md) {
-    margin: $spacing-unit;
+    margin: 0;
     padding: $spacing-unit * 2;
-    max-width: 100%;
 
     &__title {
-      font-size: $spacing-unit * 2;
-      margin-bottom: $spacing-unit * 2;
+      font-size: $spacing-unit * 2.5;
     }
 
-    &__output {
-      flex-direction: column;
-      gap: $spacing-unit;
-    }
-
-    &__password {
-      font-size: $spacing-unit * 1.5;
-      padding: $spacing-unit;
-      width: 100%;
-    }
-
+    &__password,
     &__copy {
-      width: 100%;
+      font-size: $spacing-unit * 1.8;
       padding: $spacing-unit;
-    }
-
-    &__checkboxes {
-      grid-template-columns: 1fr;
-      gap: $spacing-unit;
-    }
-
-    &__option {
-      font-size: 0.9rem;
     }
 
     &__button {
       padding: $spacing-unit * 1.5;
-      font-size: $spacing-unit * 1.5;
+      font-size: $spacing-unit * 1.8;
     }
 
-    &__length {
-      label {
-        font-size: 0.9rem;
-      }
+    &__option {
+      font-size: $spacing-unit * 1.8;
     }
+  }
+
+  @media (max-width: 1024px) {
+    margin: 0;
+    width: 100%;
   }
 
   @media (max-width: $breakpoint-sm) {
@@ -305,17 +295,6 @@ const copyToClipboard = async () => {
     &__button {
       padding: $spacing-unit;
       font-size: $spacing-unit * 1.25;
-    }
-  }
-}
-
-@media (max-width: $breakpoint-md) {
-  .generator {
-    margin: $spacing-unit * 2;
-    padding: $spacing-unit * 2;
-
-    &__checkboxes {
-      grid-template-columns: 1fr;
     }
   }
 }
