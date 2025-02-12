@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import pb from '@/services/pocketbase';
 
+useSeoMeta({
+  title: 'Cyber Awareness',
+});
+
 const searchQuery = ref('');
 const currentPage = ref(1);
 const itemsPerPage = 3;
 
 interface Formation {
   id: string;
-  collectionId: string; // Ajout de collectionId
+  collectionId: string;
   title: string;
   description: string;
   address: string;

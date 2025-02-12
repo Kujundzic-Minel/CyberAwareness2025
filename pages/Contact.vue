@@ -19,6 +19,10 @@
 </template>
 
 <script setup lang="ts">
+useSeoMeta({
+  title: 'Cyber Awareness',
+});
+
 interface ContactCardData {
   id: number;
   title: string;

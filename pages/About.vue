@@ -7,7 +7,11 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+useSeoMeta({
+  title: 'Cyber Awareness',
+});
+</script>
 
 <style lang="scss" scoped>
 .about {

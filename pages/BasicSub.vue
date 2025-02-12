@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+useSeoMeta({
+  title: 'Cyber Awareness',
+});
 
 const paymentInfo = ref({
   cardNumber: '',

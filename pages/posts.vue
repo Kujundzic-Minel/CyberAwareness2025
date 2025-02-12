@@ -5,9 +5,7 @@ import useSanityImage from '@/composables/useSanityImage';
 const { urlFor } = useSanityImage();
 
 useSeoMeta({
-  title: 'Blog | Habit tracker',
-  description:
-    'Retrouvez nos notes de mise à jour, nos astuces et nos conseils pour vous aider à atteindre vos objectifs.',
+  title: 'Cyber Awareness',
 });
 
 const selectCategory = ref('');

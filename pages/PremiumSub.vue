@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import PaymentForm from '@/components/PaymentForm.vue';
+useSeoMeta({
+  title: 'Cyber Awareness',
+});
 
 const premiumPlan = {
   title: 'Premium Plan',
@@ -42,8 +44,6 @@ const premiumPlan = {
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/foundations/_variables.scss';
-
 .payment {
   max-width: 800px;
   margin: 0 auto;

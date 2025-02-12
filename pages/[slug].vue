@@ -2,6 +2,10 @@
 import type { SanityDocument } from '@sanity/client';
 import useSanityImage from '@/composables/useSanityImage';
 
+useSeoMeta({
+  title: 'Cyber Awareness',
+});
+
 const { urlFor } = useSanityImage();
 
 const POST_QUERY = groq`

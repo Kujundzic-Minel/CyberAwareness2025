@@ -1,4 +1,8 @@
 <script setup lang="ts">
+useSeoMeta({
+  title: 'Cyber Awareness',
+});
+
 interface Homepage {
   title: string;
   hero: {

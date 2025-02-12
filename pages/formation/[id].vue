@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import pb from '@/services/pocketbase';
 
+useSeoMeta({
+  title: 'Cyber Awareness',
+});
+
 const route = useRoute();
 
 const { data: formation } = useAsyncData(

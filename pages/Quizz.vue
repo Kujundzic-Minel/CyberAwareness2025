@@ -48,6 +48,10 @@
 <script setup lang="ts">
 import pb from '@/services/pocketbase';
 
+useSeoMeta({
+  title: 'Cyber Awareness',
+});
+
 interface Theme {
   id: string;
   slug: string;

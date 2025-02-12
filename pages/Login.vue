@@ -16,6 +16,10 @@
 
 <script setup lang="ts">
 const isLogin = ref(true);
+
+useSeoMeta({
+  title: 'Cyber Awareness',
+});
 </script>
 
 <style lang="scss" scoped>
