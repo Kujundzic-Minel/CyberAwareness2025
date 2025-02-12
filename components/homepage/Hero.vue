@@ -100,10 +100,21 @@ defineProps<{
   }
 
   &__title {
-    font-size: 3.5rem;
+    font-size: 4rem;
     font-weight: $font-weight-bold;
     margin-bottom: $spacing-unit * 2;
     text-shadow: 2px 2px 4px $shadow-color;
+    padding: 0 $spacing-unit;
+
+    @media (max-width: 768px) {
+      font-size: 3.2rem;
+      padding: 0 $spacing-unit * 2;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 2.8rem;
+      padding: 0 $spacing-unit * 1.5;
+    }
   }
 
   &__text {
