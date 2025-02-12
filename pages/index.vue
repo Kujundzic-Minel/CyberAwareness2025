@@ -127,6 +127,10 @@ const subscriptionsWithDisabled = computed(() => {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+
+  @media (max-width: $breakpoint-md) {
+    margin-top: 1rem; // Ajoute un peu d'espace en haut en mobile
+  }
 }
 
 .password-tools {

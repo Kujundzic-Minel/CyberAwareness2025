@@ -53,13 +53,17 @@ onMounted(() => {
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(300px, 1fr)
+    ); // Changé de 250px à 300px
     gap: $spacing-unit * 3;
+    padding: 0 $spacing-unit * 2; // Ajout du padding horizontal
   }
 
   &__item {
     text-align: center;
-    padding: $spacing-unit * 3;
+    padding: $spacing-unit * 2; // Réduction du padding
     background: $primary-color;
     border-radius: $border-radius;
     transition: transform 0.3s ease;

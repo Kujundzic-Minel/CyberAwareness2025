@@ -246,6 +246,67 @@ const copyToClipboard = async () => {
       background: darken($accent-color, 10%);
     }
   }
+
+  @media (max-width: $breakpoint-md) {
+    margin: $spacing-unit;
+    padding: $spacing-unit * 2;
+    max-width: 100%;
+
+    &__title {
+      font-size: $spacing-unit * 2;
+      margin-bottom: $spacing-unit * 2;
+    }
+
+    &__output {
+      flex-direction: column;
+      gap: $spacing-unit;
+    }
+
+    &__password {
+      font-size: $spacing-unit * 1.5;
+      padding: $spacing-unit;
+      width: 100%;
+    }
+
+    &__copy {
+      width: 100%;
+      padding: $spacing-unit;
+    }
+
+    &__checkboxes {
+      grid-template-columns: 1fr;
+      gap: $spacing-unit;
+    }
+
+    &__option {
+      font-size: 0.9rem;
+    }
+
+    &__button {
+      padding: $spacing-unit * 1.5;
+      font-size: $spacing-unit * 1.5;
+    }
+
+    &__length {
+      label {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    margin: $spacing-unit * 0.5;
+    padding: $spacing-unit;
+
+    &__title {
+      font-size: $spacing-unit * 1.5;
+    }
+
+    &__button {
+      padding: $spacing-unit;
+      font-size: $spacing-unit * 1.25;
+    }
+  }
 }
 
 @media (max-width: $breakpoint-md) {

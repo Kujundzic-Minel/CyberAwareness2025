@@ -1,6 +1,10 @@
 <template>
   <nav class="header" :class="{ 'header--show': isMenuOpen }">
-    <button id="open-sidebar-button" class="header__toggle" @click="toggleMenu">
+    <button
+      id="open-sidebar-button"
+      class="header__toggle"
+      @click.stop="toggleMenu"
+    >
       ☰
     </button>
     <ul class="header__list" @click="handleLinkClick">
@@ -19,9 +23,6 @@
       <li class="header__item">
         <NuxtLink class="header__link" to="/quizz">Quizz</NuxtLink>
       </li>
-      <!-- <li class="header__item">
-        <NuxtLink class="header__link" to="/about">About</NuxtLink>
-      </li> -->
       <li class="header__item">
         <NuxtLink class="header__link" to="/contact">Contact</NuxtLink>
       </li>
@@ -29,16 +30,24 @@
         <NuxtLink class="header__link" to="/profile">Profile</NuxtLink>
       </li>
       <li class="header__item">
-        <NuxtLink class="header__link header__link--login" to="login"
+        <NuxtLink class="header__link header__link--login" to="/login"
           >Login</NuxtLink
         >
       </li>
     </ul>
-    <div id="overlay" class="header__overlay" @click="closeMenu" />
+    <div
+      v-if="isMenuOpen"
+      id="overlay"
+      class="header__overlay"
+      @click="closeMenu"
+    />
   </nav>
 </template>
 
 <script setup lang="ts">
+import { ref, watch, onMounted, onUnmounted } from 'vue';
+import { useRoute } from 'vue-router';
+
 const isMenuOpen = ref(false);
 const route = useRoute();
 
@@ -46,9 +55,28 @@ watch(route, () => {
   closeMenu();
 });
 
+// Empêche le scroll quand le menu est ouvert
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
-  if (isMenuOpen.value) {
+  updateBodyScroll(isMenuOpen.value);
+};
+
+// Ferme le menu
+const closeMenu = () => {
+  isMenuOpen.value = false;
+  updateBodyScroll(false);
+};
+
+// Ferme le menu quand on clique sur un lien en mobile
+const handleLinkClick = () => {
+  if (window.innerWidth <= 860) {
+    closeMenu();
+  }
+};
+
+// Gérer le défilement de la page lors de l'ouverture du menu
+const updateBodyScroll = (disable: boolean) => {
+  if (disable) {
     const scrollbarWidth =
       window.innerWidth - document.documentElement.clientWidth;
     document.body.style.overflow = 'hidden';
@@ -59,23 +87,27 @@ const toggleMenu = () => {
   }
 };
 
-const closeMenu = () => {
-  isMenuOpen.value = false;
-  document.body.style.overflow = '';
-  document.body.style.paddingRight = '';
-};
-
-const handleLinkClick = () => {
-  if (window.innerWidth <= 860) {
+const handleResize = () => {
+  if (window.innerWidth > 860) {
     closeMenu();
   }
 };
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
+});
 </script>
 
 <style lang="scss" scoped>
 .header {
   background-color: $primary-color;
   border-bottom: 1px solid $hover-color;
+  position: relative;
+  width: 100%;
 
   &__list {
     list-style: none;
@@ -164,7 +196,7 @@ const handleLinkClick = () => {
       right: 1rem;
       padding: 0.5rem;
       font-size: 1.75rem;
-      z-index: 11;
+      z-index: 1001;
     }
 
     & {
@@ -173,7 +205,7 @@ const handleLinkClick = () => {
       right: -100%;
       height: 100vh;
       width: min(15em, 100%);
-      z-index: 10;
+      z-index: 1000;
       background-color: $primary-color;
       border-left: 1px solid $hover-color;
       transition: right 300ms ease-in-out;
@@ -182,8 +214,19 @@ const handleLinkClick = () => {
       &--show {
         right: 0;
       }
+    }
 
-      &--show ~ .header__overlay {
+    &__overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+
+      .header--show & {
         display: block;
       }
     }
