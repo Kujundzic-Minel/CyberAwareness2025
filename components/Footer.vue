@@ -29,6 +29,11 @@
           <li>
             <NuxtLink to="/about" class="footer__link">À propos</NuxtLink>
           </li>
+          <li>
+            <NuxtLink to="/mentionlegal" class="footer__link"
+              >Mentions légales</NuxtLink
+            >
+          </li>
         </ul>
       </div>
 
