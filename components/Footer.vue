@@ -11,9 +11,21 @@
       <div class="footer__section">
         <h3 class="footer__subtitle">Navigation rapide</h3>
         <ul class="footer__list">
-          <li><NuxtLink to="/" class="footer__link">Accueil</NuxtLink></li>
+          <li>
+            <NuxtLink to="/" class="footer__link" @click="scrollToTop"
+              >Accueil</NuxtLink
+            >
+          </li>
+          <li>
+            <NuxtLink to="/profile" class="footer__link">Profile</NuxtLink>
+          </li>
           <li><NuxtLink to="/moocs" class="footer__link">Moocs</NuxtLink></li>
           <li><NuxtLink to="/quizz" class="footer__link">Quizz</NuxtLink></li>
+          <li>
+            <NuxtLink to="/formations" class="footer__link"
+              >Formations</NuxtLink
+            >
+          </li>
           <li>
             <NuxtLink to="/about" class="footer__link">À propos</NuxtLink>
           </li>
@@ -68,7 +80,14 @@
   </footer>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+};
+</script>
 
 <style lang="scss" scoped>
 .footer {
