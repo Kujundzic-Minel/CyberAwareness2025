@@ -107,6 +107,7 @@ const subscriptionsWithDisabled = computed(() => {
       v-if="homepage.testimonials"
       :testimonials="homepage.testimonials"
     />
+    <PromotionBar />
     <HomeSubscription
       v-if="homepage.subscriptions"
       :subscriptions="subscriptionsWithDisabled"
