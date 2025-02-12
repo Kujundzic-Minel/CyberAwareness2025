@@ -1,10 +1,6 @@
 <template>
   <nav class="header" :class="{ 'header--show': isMenuOpen }">
-    <button
-      id="open-sidebar-button"
-      class="header__toggle"
-      @click.stop="toggleMenu"
-    >
+    <button id="open-sidebar-button" class="header__toggle" @click="toggleMenu">
       ☰
     </button>
     <ul class="header__list" @click="handleLinkClick">
@@ -35,12 +31,6 @@
         >
       </li>
     </ul>
-    <div
-      v-if="isMenuOpen"
-      id="overlay"
-      class="header__overlay"
-      @click="closeMenu"
-    />
   </nav>
 </template>
 
@@ -58,32 +48,17 @@ watch(route, () => {
 // Empêche le scroll quand le menu est ouvert
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
-  updateBodyScroll(isMenuOpen.value);
 };
 
 // Ferme le menu
 const closeMenu = () => {
   isMenuOpen.value = false;
-  updateBodyScroll(false);
 };
 
 // Ferme le menu quand on clique sur un lien en mobile
 const handleLinkClick = () => {
   if (window.innerWidth <= 860) {
     closeMenu();
-  }
-};
-
-// Gérer le défilement de la page lors de l'ouverture du menu
-const updateBodyScroll = (disable: boolean) => {
-  if (disable) {
-    const scrollbarWidth =
-      window.innerWidth - document.documentElement.clientWidth;
-    document.body.style.overflow = 'hidden';
-    document.body.style.paddingRight = `${scrollbarWidth}px`;
-  } else {
-    document.body.style.overflow = '';
-    document.body.style.paddingRight = '';
   }
 };
 
@@ -180,14 +155,6 @@ onUnmounted(() => {
     z-index: 11;
   }
 
-  &__overlay {
-    background: rgba(0, 0, 0, 0.5);
-    position: fixed;
-    inset: 0;
-    z-index: 9;
-    display: none;
-  }
-
   @media screen and (max-width: 860px) {
     &__toggle {
       display: block;
@@ -196,7 +163,7 @@ onUnmounted(() => {
       right: 1rem;
       padding: 0.5rem;
       font-size: 1.75rem;
-      z-index: 1001;
+      z-index: 11;
     }
 
     & {
@@ -205,7 +172,7 @@ onUnmounted(() => {
       right: -100%;
       height: 100vh;
       width: min(15em, 100%);
-      z-index: 1000;
+      z-index: 10;
       background-color: $primary-color;
       border-left: 1px solid $hover-color;
       transition: right 300ms ease-in-out;
@@ -213,21 +180,17 @@ onUnmounted(() => {
 
       &--show {
         right: 0;
-      }
-    }
 
-    &__overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 999;
-
-      .header--show & {
-        display: block;
+        &::before {
+          content: '';
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: -1;
+        }
       }
     }
 
