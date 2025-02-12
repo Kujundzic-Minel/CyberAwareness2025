@@ -1,23 +1,33 @@
 <template>
   <div class="moocs">
     <h1 class="moocs__title">MOOCs</h1>
-    <div v-if="videos.length" class="moocs__content">
-      <div
-        v-for="video in videos"
-        :key="video.id"
-        class="moocs__video-container"
+
+    <div v-if="!isAuthenticated" class="auth-required">
+      <p>Vous devez être connecté pour accéder aux MOOCs</p>
+      <NuxtLink to="/login" class="auth-link"
+        >Se connecter / S'inscrire</NuxtLink
       >
-        <h2 class="moocs__video-title">{{ video.title }}</h2>
-        <iframe
-          class="moocs__video-frame"
-          :src="formatYoutubeUrl(video.video_link)"
-          frameborder="0"
-          allowfullscreen
-        />
-      </div>
     </div>
+
     <div v-else>
-      <p class="moocs__empty-message">Aucune vidéo disponible.</p>
+      <div v-if="videos.length" class="moocs__content">
+        <div
+          v-for="video in videos"
+          :key="video.id"
+          class="moocs__video-container"
+        >
+          <h2 class="moocs__video-title">{{ video.title }}</h2>
+          <iframe
+            class="moocs__video-frame"
+            :src="formatYoutubeUrl(video.video_link)"
+            frameborder="0"
+            allowfullscreen
+          />
+        </div>
+      </div>
+      <div v-else>
+        <p class="moocs__empty-message">Aucune vidéo disponible.</p>
+      </div>
     </div>
   </div>
 </template>
@@ -29,9 +39,12 @@ useSeoMeta({
   title: 'Cyber Awareness',
 });
 
+const isAuthenticated = computed(() => pb.authStore.isValid);
 const videos = ref([]);
 
 onMounted(async () => {
+  if (!isAuthenticated.value) return;
+
   try {
     const records = await pb.collection('moocs').getFullList();
     videos.value = records;
@@ -189,6 +202,38 @@ const formatYoutubeUrl = (url) => {
     &__video-container {
       padding: $spacing-unit;
     }
+  }
+}
+
+.auth-required {
+  text-align: center;
+  padding: 2rem;
+  background: darken($primary-color, 3%);
+  border-radius: 8px;
+  border: 1px solid $hover-color;
+  margin: 2rem auto;
+  max-width: 500px;
+
+  p {
+    color: $text-color;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+}
+
+.auth-link {
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  background-color: $accent-color;
+  color: $text-color;
+  border-radius: $border-radius;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    background-color: darken($accent-color, 10%);
+    transform: translateY(-2px);
   }
 }
 </style>

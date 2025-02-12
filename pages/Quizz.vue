@@ -8,39 +8,48 @@
       </p>
     </div>
 
-    <div class="quiz-page__stats">
-      <div class="stat-card">
-        <span class="stat-card__number">{{ themes.length }}</span>
-        <span class="stat-card__label">Quiz disponibles</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-card__number">20+</span>
-        <span class="stat-card__label">Questions par quiz</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-card__number">100%</span>
-        <span class="stat-card__label">Gratuit</span>
-      </div>
+    <div v-if="!isAuthenticated" class="auth-required">
+      <p>Vous devez être connecté pour accéder aux quiz</p>
+      <NuxtLink to="/login" class="auth-link"
+        >Se connecter / S'inscrire</NuxtLink
+      >
     </div>
 
-    <div class="quiz-page__search">
-      <SearchBar
-        v-model="searchQuery"
-        placeholder="Rechercher un quiz..."
-        :result-count="filteredThemes.length"
-      />
-    </div>
+    <div v-else>
+      <div class="quiz-page__stats">
+        <div class="stat-card">
+          <span class="stat-card__number">{{ themes.length }}</span>
+          <span class="stat-card__label">Quiz disponibles</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-card__number">20+</span>
+          <span class="stat-card__label">Questions par quiz</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-card__number">100%</span>
+          <span class="stat-card__label">Gratuit</span>
+        </div>
+      </div>
 
-    <div class="quiz-page__themes">
-      <p v-if="searchQuery && !filteredThemes.length" class="no-results">
-        Aucun quiz ne correspond à votre recherche
-      </p>
-      <ThemeCard
-        v-for="theme in filteredThemes"
-        :key="theme.slug"
-        :theme="theme"
-        class="quiz-page__theme-card"
-      />
+      <div class="quiz-page__search">
+        <SearchBar
+          v-model="searchQuery"
+          placeholder="Rechercher un quiz..."
+          :result-count="filteredThemes.length"
+        />
+      </div>
+
+      <div class="quiz-page__themes">
+        <p v-if="searchQuery && !filteredThemes.length" class="no-results">
+          Aucun quiz ne correspond à votre recherche
+        </p>
+        <ThemeCard
+          v-for="theme in filteredThemes"
+          :key="theme.slug"
+          :theme="theme"
+          class="quiz-page__theme-card"
+        />
+      </div>
     </div>
   </main>
 </template>
@@ -59,6 +68,7 @@ interface Theme {
   description: string;
 }
 
+const isAuthenticated = computed(() => pb.authStore.isValid);
 const themes = ref<Theme[]>([]);
 const searchQuery = ref('');
 
@@ -73,6 +83,8 @@ const filteredThemes = computed(() => {
 });
 
 onMounted(async () => {
+  if (!isAuthenticated.value) return;
+
   try {
     themes.value = await pb.collection('themes').getFullList();
   } catch (error) {
@@ -86,7 +98,9 @@ onMounted(async () => {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1rem;
-
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   &__header {
     text-align: center;
     margin-bottom: 3rem;
@@ -145,6 +159,7 @@ onMounted(async () => {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
     padding: 1rem;
+    flex: 1; // Permet au contenu de prendre l'espace restant
   }
 }
 
@@ -184,6 +199,38 @@ onMounted(async () => {
   background-color: darken($primary-color, 3%);
   border-radius: 8px;
   border: 1px solid $hover-color;
+}
+
+.auth-required {
+  text-align: center;
+  padding: 2rem;
+  background: darken($primary-color, 3%);
+  border-radius: 8px;
+  border: 1px solid $hover-color;
+  margin: 2rem auto;
+  max-width: 500px;
+
+  p {
+    color: $text-color;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+}
+
+.auth-link {
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  background-color: $accent-color;
+  color: $text-color;
+  border-radius: $border-radius;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    background-color: darken($accent-color, 10%);
+    transform: translateY(-2px);
+  }
 }
 
 @media (max-width: 768px) {
